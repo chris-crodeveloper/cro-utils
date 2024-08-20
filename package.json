@@ -1,0 +1,17 @@
+{
+  "name": "cro-utils",
+  "version": "1.0.0",
+  "description": "A utils package of useful functions for CRO development. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chris Davies",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^4.0.3"
+  },
+  "dependencies": {
+    "tui-jsdoc-template": "^1.2.2"
+  }
+}

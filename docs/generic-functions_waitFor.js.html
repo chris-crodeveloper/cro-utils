@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: generic-functions/waitFor.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: generic-functions/waitFor.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Wait For Utility functions
+ * @category Wait For Utils
+ * @module WaitForUtils
+ */
+
+/**
+ * This callback is displayed as a global member.
+ * @callback waitForElementCallback
+ * @param {HTMLElement} el
+ */
+
+/**
+ * Waits for an HTML element to exist in the DOM.
+ * @function waitForElement
+ * @param {string} element - CSS selector string for the element to wait for
+ * @param {waitForElementCallback} callback - Callback to run once element is found with, the cached HTML element as a parameter
+ */
+export const waitForElement = (element, callback) => {
+  const maxCalls = 50,
+    delay = 500;
+  let count = 0;
+  const interval = setInterval(() => {
+    try {
+      const el = document.querySelector(element);
+
+      if (el) {
+        clearInterval(interval);
+
+        callback(el);
+      }
+
+      // After trying to find the element for 6 seconds, it stops
+      if (count > maxCalls) clearInterval(interval);
+
+      // increment interval count
+      count++;
+    } catch (error) {
+      console.error(error);
+    }
+  }, delay);
+};
+
+/**
+ * Waits for an HTML element to exist in the DOM, if it doesn't exist run fallback
+ * @function waitForElementWithFallback
+ * @param {string} element - CSS selector string for the element to wait for
+ * @param {waitForElementCallback} callback - Callback to run once element is found with, the cached HTML element as a parameter
+ * @param {waitForElementCallback} fallback - Callback to run if element is not found
+ */
+export const waitForElementWithFallback = (element, callback, fallback) => {
+  const maxCalls = 50,
+    delay = 500;
+  let count = 0;
+  const interval = setInterval(() => {
+    try {
+      const el = document.querySelector(element);
+
+      if (el) {
+        clearInterval(interval);
+
+        callback(el);
+      }
+
+      // After trying to find the element for 6 seconds, it stops
+      if (count > maxCalls) {
+        clearInterval(interval);
+        fallback(element);
+      }
+
+      // increment interval count
+      count++;
+    } catch (error) {
+      console.error(error);
+    }
+  }, delay);
+};
+
+/**
+ * Returns a waitForElement function whilst setting up error handling
+ * @function waitForElementSendAlert
+ * @param {string} testId - Test ID
+ * @param {function} callback - Function to send GA event
+ * @returns {waitForElement} function
+ */
+export const waitForElementSendAlert = (testId, callback) => {
+  return (element, cb) => {
+    const maxCalls = 50,
+      delay = 500;
+    let count = 0;
+    const interval = setInterval(() => {
+      try {
+        const el = document.querySelector(element);
+
+        if (el) {
+          clearInterval(interval);
+
+          cb(el);
+        }
+
+        // After trying to find the element for 6 seconds, it stops
+        if (count > maxCalls) {
+          clearInterval(interval);
+          callback(`${testId} alert`, `${element} not found`);
+        }
+
+        // increment interval count
+        count++;
+      } catch (error) {
+        callback(`${testId} error`, `${error}`);
+      }
+    }, delay);
+  };
+};
+
+/**
+ * Waits for HTML elements (using querySelectorAll) to exist in the DOM.
+ * @function waitForElements
+ * @param {string} element - CSS selector string for the elements to wait for
+ * @param {waitForElementCallback} callback - Callback to run once element is found with, the cached HTML DOM Element Array as a parameter
+ */
+export const waitForElements = (element, callback) => {
+  const maxCalls = 50,
+    delay = 500;
+  let count = 0;
+  const interval = setInterval(() => {
+    try {
+      const el = document.querySelectorAll(element);
+
+      if (el.length > 0) {
+        clearInterval(interval);
+
+        callback(el);
+      }
+
+      // After trying to find the element for 6 seconds, it stops
+      if (count > maxCalls) clearInterval(interval);
+
+      // increment interval count
+      count++;
+    } catch (error) {
+      console.error(error);
+    }
+  }, delay);
+};
+
+/**
+ * Waits for an item to be present in local storage.
+ * @function waitForLocalStorageItem
+ * @param {string} itemName - Local storage item name
+ * @param {function} callback - Callback to run once element is found with, the cached local storage item as a parameter
+ * @param {object} intervalConfig - maxCalls and delay
+ * @param {function} fallback - Fallback to run when the interval times out
+ */
+export const waitForLocalStorageItem = (
+  itemName,
+  callback,
+  intervalConfig,
+  fallback
+) => {
+  const maxCalls = intervalConfig ? intervalConfig.maxCalls : 500,
+    delay = intervalConfig ? intervalConfig.delay : 50;
+  let count = 0;
+  const interval = setInterval(() => {
+    try {
+      // Add code here
+      const item = window.localStorage.getItem(itemName);
+
+      if (item &amp;&amp; item !== "null") {
+        clearInterval(interval);
+
+        callback(JSON.parse(item));
+      }
+
+      // After trying to find the element for 6 seconds, it stops
+      if (count > maxCalls) {
+        clearInterval(interval);
+        if (fallback) fallback();
+      }
+
+      // increment interval count
+      count++;
+    } catch (error) {
+      console.error(error);
+    }
+  }, delay);
+};
+
+/**
+ * Waits for an item to be present in session storage.
+ * @function waitForSessionStorageItem
+ * @param {string} itemName - Session storage item name
+ * @param {function} callback - Callback to run once element is found, with the cached session storage item as a parameter
+ * @param {object} intervalConfig - maxCalls and delay
+ * @param {function} fallback - Fallback to run when the interval times out
+ */
+export const waitForSessionStorageItem = (
+  itemName,
+  callback,
+  intervalConfig,
+  fallback
+) => {
+  const maxCalls = intervalConfig ? intervalConfig.maxCalls : 500,
+    delay = intervalConfig ? intervalConfig.delay : 50;
+  let count = 0;
+  const interval = setInterval(() => {
+    try {
+      // Add code here
+      const item = window.sessionStorage.getItem(itemName);
+
+      if (item &amp;&amp; item !== "null") {
+        clearInterval(interval);
+
+        callback(item);
+      }
+
+      // After trying to find the element for 6 seconds, it stops
+      if (count > maxCalls) {
+        clearInterval(interval);
+        if (fallback) fallback();
+      }
+
+      // increment interval count
+      count++;
+    } catch (error) {
+      console.error(error);
+    }
+  }, delay);
+};
+
+/**
+ * Waits for an item to be present in window
+ * @function waitForWindowProperty
+ * @param {string} propertyName - Window object property name
+ * @param {function} callback - Callback to run once property is found, with the cached window property as a parameter
+ * @param {object} intervalConfig - maxCalls and delay
+ * @param {function} fallback - Fallback to run when the interval times out
+ */
+export const waitForWindowProperty = (
+  propertyName,
+  callback,
+  intervalConfig,
+  fallback
+) => {
+  const maxCalls = intervalConfig ? intervalConfig.maxCalls : 500,
+    delay = intervalConfig ? intervalConfig.delay : 50;
+  let count = 0;
+  const interval = setInterval(() => {
+    try {
+      // Add code here
+      const item = window[propertyName];
+
+      if (item &amp;&amp; item !== "null") {
+        clearInterval(interval);
+
+        callback(item);
+      }
+
+      // After trying to find the element for 6 seconds, it stops
+      if (count > maxCalls) {
+        clearInterval(interval);
+        if (fallback) fallback();
+      }
+
+      // increment interval count
+      count++;
+    } catch (error) {
+      console.error(error);
+    }
+  }, delay);
+};
+
+/**
+ * Return event from data layer
+ * @function getEventFromDataLayer
+ * @param {string} eventName - event name property
+ * @returns {object} event object
+ */
+export const getEventFromDataLayer = (eventName) => {
+  try {
+    const dataLayer = window.dataLayer || window[0].parent.dataLayer;
+    let dataLayerItem;
+
+    if (dataLayer) {
+      dataLayer.forEach((item) => {
+        if (item.event_name === eventName) {
+          dataLayerItem = item;
+        }
+      });
+
+      return dataLayerItem;
+    }
+  } catch (e) {
+    console.log("Set to local storage error: ", e);
+  }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AjaxUtils.html">AjaxUtils</a></li><li><a href="module-Common%2520Utils.html">Common Utils</a></li><li><a href="module-CookiesUtils.html">CookiesUtils</a></li><li><a href="module-ErrorHandlingUtils.html">ErrorHandlingUtils</a></li><li><a href="module-Gestures.html">Gestures</a></li><li><a href="module-OptimizelyUtils.html">OptimizelyUtils</a></li><li><a href="module-SafeUtils.html">SafeUtils</a></li><li><a href="module-WaitForUtils.html">WaitForUtils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Aug 20 2024 17:35:57 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

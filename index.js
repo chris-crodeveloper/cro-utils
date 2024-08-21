@@ -1,25 +1,21 @@
 // index.js inside the lib folder
 
-// Import your functions
-const {
-  fetchApi,
-  interceptAjaxResponse,
-  getUUID,
-} = require("./utils/ajax/ajax");
-const {
+// Import your functions using ES6 import syntax
+import { fetchApi, interceptAjaxResponse, getUUID } from "./utils/ajax/ajax";
+import {
   getCookie,
   setCookie,
   deleteCookie,
-} = require("./utils/generic-functions/cookies");
-const { handleError } = require("./utils/generic-functions/errorHandling");
-const {
+} from "./utils/generic-functions/cookies";
+import { handleError } from "./utils/generic-functions/errorHandling";
+import {
   toPascalCase,
   injectScript,
   mutationObserverOnURL,
   observeForExitIntent,
   waitForAngularRootElements,
-} = require("./utils/generic-functions/common");
-const {
+} from "./utils/generic-functions/common";
+import {
   waitForElement,
   waitForElementWithFallback,
   waitForElementSendAlert,
@@ -28,17 +24,17 @@ const {
   waitForSessionStorageItem,
   waitForWindowProperty,
   getEventFromDataLayer,
-} = require("./utils/generic-functions/waitFor");
-const { setupMobileSwipeGestures } = require("./utils/gestures/mobileSwipes");
-const { setupMouseWheelEvents } = require("./utils/gestures/mouseWheel");
-const { sendOptimizelyMetric } = require("./utils/optimizely/opti");
-const {
+} from "./utils/generic-functions/waitFor";
+import { setupMobileSwipeGestures } from "./utils/gestures/mobileSwipes";
+import { setupMouseWheelEvents } from "./utils/gestures/mouseWheel";
+import { sendOptimizelyMetric } from "./utils/optimizely/opti";
+import {
   withTryCatch,
   withTryCatchHandleError,
-} = require("./utils/safe-functions/utils");
+} from "./utils/safe-functions/utils";
 
-// Export the functions to make them accessible to users of your package
-module.exports = {
+// Export the functions using ES6 export syntax
+export {
   fetchApi,
   interceptAjaxResponse,
   getUUID,

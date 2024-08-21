@@ -1,7 +1,7 @@
 /**
  * @file Common Utility functions
  * @category Common Utils
- * @module Common Utils
+ * @module CommonUtils
  */
 
 /**

@@ -64,18 +64,8 @@ cro-utils offers a comprehensive set of functions to streamline your CRO develop
 - **sendOptimizelyMetric**: Sends metrics to Optimizely.
 - **withTryCatch, withTryCatchHandleError**: Functions for safe execution with error handling.
 
-For detailed documentation on each function, including parameters and return values, refer to the [API Documentation](https://github.com/your-github-username/cro-utils/blob/main/API_DOCUMENTATION.md).
+For detailed documentation on each function, including parameters and return values, refer to the [API Documentation](https://chris-crodeveloper.github.io/cro-utils/).
 
 ## Contributing
 
 Contributions are welcome! Feel free to suggest new functions or improvements by opening a pull request or creating an issue on the GitHub repository.
-
-## License
-
-cro-utils is licensed under the MIT License. See the [LICENSE](https://github.com/your-github-username/cro-utils/blob/main/LICENSE) file for details.
-
----
-
-Remember to replace "your-github-username" with your actual GitHub username in the links provided.
-
-This README provides a comprehensive overview of the cro-utils package, highlighting its features, installation process, usage examples, and available functions. It should help developers understand the benefits and functionality of your package.

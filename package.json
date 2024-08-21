@@ -1,6 +1,6 @@
 {
   "name": "cro-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A utils package of useful functions for CRO development. ",
   "main": "index.js",
   "scripts": {
